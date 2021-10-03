@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Colmeia</title>
+  <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
+</head>
+
+<body style="padding: 0px; margin: 0">
+  <style>
+    div {
+      width: 100%;
+      height: 100vh;
+      border: 1px solid black;
+    }
+  </style>
+
+  <div onmousemove="myFunction(event)"></div>
+
+  <p id="demo"></p>
+
+  <script>
+    ///// Colmeia/////
+    // initialize SVG.js
+    var draw = SVG().addTo("div").size("1100", "500");
+    var x, y;
+    var tam, ql, ang, i, j, col;
+
+    draw.rect(1200, 500).fill({ color: "#5c6b79" });
+
+    tam = 50;
+    ql = 6;
+    ang = (2 * Math.PI) / ql;
+
+    //posição inicial
+    x = 0;
+    y = 0;
+    col = 0;
+    // while (y < 500) {
+    //   while (x < 1100) {
+    //     /// Elemento Hexágono
+    //     for (j = 0; j < ql; j++) {
+    //       for (i = 0; i < tam; i++) {
+    //         // draw pink square
+    //         draw.rect(5, 5).move(x, y).fill({ color: "brown", opacity: 0.3 });
+    //         x = x + Math.cos(ang * j);
+    //         y = y + Math.sin(ang * j);
+    //       }
+    //     }
+    //     ///////////////
+    //     x = x + tam + tam * Math.cos(ang);
+    //     if (col == 0) {
+    //       y = y + tam * Math.sin(ang);
+    //       col = 1;
+    //     } else {
+    //       y = y - tam * Math.sin(ang);
+    //       col = 0;
+    //     }
+    //   }
+    //   x = 0;
+    //   y = y + 3 * tam * Math.sin(ang);
+    // }
+  </script>
+
+  <script>
+    /////////// Abelhas ////////////////
+    var myVar = setInterval(myTimer, 300);
+
+
+    function generateCars(quantity = 1) {
+      let baseColors, colors = ['green', 'yellow', 'red', 'white', 'pink']
+
+      return Array.from({ length: quantity }, () => {
+        let index = Math.floor(Math.random() * (colors.length))
+
+        let color = colors.splice(index, 1)
+
+        console.log(color);
+
+        return draw.image(`./cars/${color}.svg`).size(100, 100)
+      })
+    }
+
+
+    var [abelha1, abelha2, abelha3, abelha4] = generateCars(4)
+
+    ////// fim criação abelha /////////
+
+    ///////  gerando mais abelhas //////
+    var vx, vy, contador;
+    vx = 600;
+    vy = 100;
+    contador = 0;
+    function myTimer() {
+      contador = contador + 1;
+      vx = vx + 10;
+      document.getElementById("demo").innerHTML = contador;
+      abelha2.move(vx, vy).rotate(5);
+      abelha3
+        .move(250 + Math.random() * 100, 150 + vy)
+        .rotate(10 - 30 * Math.random());
+      abelha4.move(Math.random() * 1000, Math.random() * 400);
+
+      if (contador > 100) contador = 0;
+    }
+
+    function myFunction(e) {
+      var x = e.clientX;
+      var y = e.clientY;
+      abelha1.move(x, y);
+    }
+  </script>
+</body>
+
+</html>
