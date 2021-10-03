@@ -25,6 +25,8 @@ export class Map extends Character {
   _drawStreets() {
     let streetSize = 200;
 
+    let streetBorder = 2;
+
     function _drawHorizontally(that) {
       let streetWidth = (that.width - streetSize) / 2;
 
@@ -86,9 +88,12 @@ export class Map extends Character {
 
     function _drawJunction(that) {
       that.context
-        .rect(streetSize, streetSize)
+        .rect(streetSize + streetBorder, streetSize + streetBorder)
         .fill({ color: "#383838" })
-        .move((that.width - streetSize) / 2, (that.height - streetSize) / 2);
+        .move(
+          (that.width - streetSize - streetBorder) / 2,
+          (that.height - streetSize - streetBorder) / 2
+        );
     }
 
     _drawHorizontally(this);
@@ -96,11 +101,12 @@ export class Map extends Character {
     _drawJunction(this);
   }
 
-  _drawStreet({ streetWidth, streetSize }, { x = 0, y = 0 }) {
+  _drawStreet({ streetWidth, streetSize, streetBorder = 2 }, { x = 0, y = 0 }) {
     this.context
       .rect(streetWidth, streetSize)
       .fill({ color: "#383838" })
-      .move(x, y);
+      .move(x, y)
+      .stroke({ color: "#fff", width: streetBorder });
   }
 
   _drawStreetMarks(
