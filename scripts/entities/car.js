@@ -37,6 +37,6 @@ export class Car extends Character {
       }, 50);
     }
 
-    loop(this);
+    // loop(this);
   }
 }
