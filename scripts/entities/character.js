@@ -1,6 +1,6 @@
-import Canvas from "./canvas";
+import { Canvas } from "./canvas.js";
 
-export default class Character extends Canvas {
+export class Character extends Canvas {
   position = { x: 0, y: 0 };
 
   constructor({ x, y, context }) {
@@ -8,4 +8,6 @@ export default class Character extends Canvas {
 
     this.position = { x, y };
   }
+
+  turnOn() {}
 }

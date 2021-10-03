@@ -1,21 +1,24 @@
-import { TrafficLight, drawTraficLight } from "./entities/trafficLight.js";
+import { TrafficLight } from "./entities/trafficLight.js";
+
+import { Map } from "./entities/map.js";
+
+import { Car } from "./entities/car.js";
 
 ///// Colmeia/////
 // initialize SVG.js
 
-var draw = SVG().addTo("div").size("1100", "500");
-var x, y;
+let map = new Map({ width: 1200, height: 500 });
 
-draw.rect(1200, 500).fill({ color: "#5c6b79" });
+map.draw();
 
-drawTraficLight(draw, { x: 100, y: 100 });
-
-let lights = [
-  new TrafficLight({ x: 200, y: 200, context: draw }),
-  new TrafficLight({ x, y, context: draw }),
+let entities = [
+  new TrafficLight({ x: 200, y: 200 }),
+  new Car({ x: 400, y: 200, color: "red" }),
 ];
 
-lights.map((l) => {
-  l.draw();
-  l.turnOn();
+map.setEntities(entities);
+
+map.entities.map((e) => {
+  e.draw();
+  e.turnOn();
 });

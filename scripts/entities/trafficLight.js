@@ -1,16 +1,6 @@
-class Canvas {
-  context;
-  constructor(context) {
-    this.context = context;
-  }
+import { Character } from "./character.js";
 
-  draw() {
-    throw new Error("Method not implemented");
-  }
-}
-
-class TrafficLight extends Canvas {
-  position = { x: 0, y: 0 };
+export class TrafficLight extends Character {
   lights = [
     { id: "red", value: "#ff0000", canvas: null },
     { id: "yellow", value: "#ffd70099", canvas: null },
@@ -26,12 +16,11 @@ class TrafficLight extends Canvas {
   currentLight = {};
 
   constructor({ x, y, context }) {
-    super(context);
-
-    this.position = { x, y };
+    super({ x, y, context });
   }
 
   draw() {
+    // TODO - Calcular os espaçamentos automaticamente
     var rectX = 40;
     var rectY = 100;
 
@@ -105,16 +94,4 @@ class TrafficLight extends Canvas {
     if (this.lights[lightIndex].value.length === 7)
       this.lights[lightIndex].value = `${this.lights[lightIndex].value}99`;
   }
-}
-
-function drawTraficLight(draw, { x, y }) {
-  let lights = [
-    new TrafficLight({ x: 200, y: 200, context: draw }),
-    new TrafficLight({ x, y, context: draw }),
-  ];
-
-  lights.map((l) => {
-    l.draw();
-    l.turnOn();
-  });
 }

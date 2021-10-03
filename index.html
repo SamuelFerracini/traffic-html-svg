@@ -19,27 +19,11 @@
     <p id="demo"></p>
 
     <!-- <script src="./scripts/car.js"></script> -->
-    <script src="./scripts/entities/trafficLight.js"></script>
+    <script type="module" src="./scripts/main.js"></script>
 
     <script>
       ///// Colmeia/////
       // initialize SVG.js
-      var draw = SVG().addTo("div").size("1100", "500");
-      var x, y;
-      var tam, ql, ang, i, j, col;
-
-      draw.rect(1200, 500).fill({ color: "#5c6b79" });
-
-      drawTraficLight(draw, { x: 100, y: 100 });
-
-      tam = 50;
-      ql = 6;
-      ang = (2 * Math.PI) / ql;
-
-      //posição inicial
-      x = 0;
-      y = 0;
-      col = 0;
     </script>
   </body>
 </html>
