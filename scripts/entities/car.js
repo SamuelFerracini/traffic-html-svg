@@ -39,4 +39,18 @@ export class Car extends Character {
 
     // loop(this);
   }
+
+  drive({ up, down, left, right }) {
+    let velocity = 5;
+
+    if (up) this.position.y -= velocity;
+
+    if (down) this.position.y += velocity;
+
+    if (left) this.position.x -= velocity;
+
+    if (right) this.position.x += velocity;
+
+    this.canvas.move(this.position.x, this.position.y);
+  }
 }

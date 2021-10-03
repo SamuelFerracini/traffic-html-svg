@@ -123,10 +123,11 @@ export class Map extends Character {
     let marksQuantity = Math.round(streetWidth / (mark.height + fullSpace));
 
     for (let i = 0; i < marksQuantity; i++) {
+      let color = "#fff";
       if (isHorizotal) {
         this.context
           .rect(mark.height, mark.width)
-          .fill({ color: "#FFEA2D" })
+          .fill({ color })
           .move(
             space + initialPosition.x,
             (this.height - mark.height / 2) / 2 + initialPosition.y
@@ -134,7 +135,7 @@ export class Map extends Character {
       } else {
         this.context
           .rect(mark.width, mark.height)
-          .fill({ color: "#FFEA2D" })
+          .fill({ color })
           .move(this.width / 2 - mark.width / 2, space + initialPosition.y);
       }
 
