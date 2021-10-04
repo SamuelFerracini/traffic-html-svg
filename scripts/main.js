@@ -4,14 +4,16 @@ import { Map } from "./entities/map.js";
 
 import { Car } from "./entities/car.js";
 
-///// Colmeia/////
-// initialize SVG.js
-
 let map = new Map({ width: window.innerWidth, height: window.innerHeight });
 
 map.draw();
 
-let car = new Car({ x: 400, y: 200, color: "red" });
+let car = new Car({
+  x: 400,
+  y: 200,
+  color: "pink",
+  size: { height: 50, width: 100 },
+});
 
 let entities = [new TrafficLight({ x: 200, y: 200 }), car];
 
@@ -22,34 +24,47 @@ map.entities.map((e) => {
   e.turnOn();
 });
 
-let keys = { up: false, down: false, left: false, right: false };
+var tickRate = 25,
+  keyDown = {},
+  keyMap = {
+    37: "left",
+    38: "up",
+    39: "right",
+    40: "down",
+    87: "w",
+    68: "d",
+    65: "a",
+    83: "s",
+  };
 
-addEventListener("keydown", (event) => {
-  let direction;
+addEventListener("keydown", (e) => {
+  console.log(e.which);
+  keyDown[keyMap[e.which]] = true;
+});
 
-  if (event.key === "a") direction = "left";
+addEventListener("keyup", (e) => {
+  keyDown[keyMap[e.which]] = false;
+});
 
-  if (event.key === "s") direction = "down";
+var tick = function () {
+  let keys = { up: false, down: false, left: false, right: false };
 
-  if (event.key === "d") direction = "right";
-
-  if (event.key === "w") direction = "up";
-
-  if (direction) keys[direction] = true;
+  if (keyDown["up"] || keyDown["w"]) {
+    keys.up = true;
+  }
+  if (keyDown["down"] || keyDown["s"]) {
+    keys.down = true;
+  }
+  if (keyDown["left"] || keyDown["a"]) {
+    keys.left = true;
+  }
+  if (keyDown["right"] || keyDown["d"]) {
+    keys.right = true;
+  }
 
   car.drive(keys);
-});
 
-addEventListener("keyup", (event) => {
-  let direction;
+  setTimeout(tick, tickRate);
+};
 
-  if (event.key === "a") direction = "left";
-
-  if (event.key === "s") direction = "down";
-
-  if (event.key === "d") direction = "right";
-
-  if (event.key === "w") direction = "up";
-
-  if (direction) keys[direction] = false;
-});
+tick();
