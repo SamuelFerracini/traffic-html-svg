@@ -5,18 +5,17 @@ export class Map extends Character {
   height = 0;
   context = null;
   backgroundColor = "";
-  entities = [];
 
-  constructor({ width, height, backgroundColor = "#5c6b79" }) {
+  constructor({ width, height, backgroundColor = "#5c6b79", context }) {
     super({ x: 0, y: 0 });
 
     this.width = width;
     this.height = height;
     this.backgroundColor = backgroundColor;
+    this.context = context;
   }
 
   draw() {
-    this.context = SVG().addTo("div").size(this.width, this.height);
     this.context.rect(this.width, this.height).fill(this.backgroundColor);
 
     this._drawStreets();
@@ -141,12 +140,5 @@ export class Map extends Character {
 
       space += fullSpace + mark.height;
     }
-  }
-
-  setEntities(entities = []) {
-    this.entities = entities.map((e) => {
-      e.context = this.context;
-      return e;
-    });
   }
 }

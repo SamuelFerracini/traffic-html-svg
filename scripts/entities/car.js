@@ -2,15 +2,68 @@ import { Character } from "./character.js";
 
 export class Car extends Character {
   color = "";
-  size = { width: 100, height: 100 };
+  size = { width: 0, height: 0 };
+  isAI = false;
+
+  velocity = 0;
+
+  maxVelocity = 10;
 
   canvas = null;
 
-  constructor({ x, y, context, color, size = { width: 100, height: 100 } }) {
+  keyDown = {};
+
+  constructor({ x, y, context, color, size = { width: 100, height: 50 } }) {
     super({ x, y, context });
 
     this.color = color;
     this.size = size;
+
+    const keyMap = {
+      39: "right",
+      37: "left",
+      40: "down",
+      32: "space",
+      38: "up",
+      87: "w",
+      68: "d",
+      65: "a",
+      83: "s",
+    };
+
+    addEventListener("keydown", (e) => {
+      this.keyDown[keyMap[e.which]] = true;
+    });
+
+    addEventListener("keyup", (e) => {
+      this.keyDown[keyMap[e.which]] = false;
+    });
+  }
+
+  userInput() {
+    let keys = {
+      up: false,
+      down: false,
+      left: false,
+      right: false,
+      space: false,
+    };
+
+    if (this.keyDown["up"] || this.keyDown["w"]) keys.up = true;
+
+    if (this.keyDown["down"] || this.keyDown["s"]) keys.down = true;
+
+    if (this.keyDown["left"] || this.keyDown["a"]) keys.left = true;
+
+    if (this.keyDown["right"] || this.keyDown["d"]) keys.right = true;
+
+    if (this.keyDown["space"]) keys.space = true;
+
+    this.drive(keys);
+  }
+
+  update() {
+    if (!this.isAI) this.userInput();
   }
 
   draw() {
@@ -26,30 +79,30 @@ export class Car extends Character {
       .move(this.position.x, this.position.y);
   }
 
-  turnOn() {
-    function loop(that) {
-      setTimeout(() => {
-        that.position.x += 1;
+  drive({ up, down, left, right, space }) {
+    if (space && this.velocity > 3) {
+      this.velocity = this.velocity - 0.5;
 
-        that.canvas.move(that.position.x, that.position.y);
+      if (left) {
+        this.canvas.rotate(-3, this.position.x + 50, this.position.y);
+      }
 
-        loop(that);
-      }, 50);
+      if (right) {
+        this.canvas.rotate(3, this.position.x + 50, this.position.y);
+      }
     }
 
-    // loop(this);
-  }
+    if (up && this.velocity < this.maxVelocity)
+      this.velocity = this.velocity + 0.5;
 
-  drive({ up, down, left, right }) {
-    let velocity = 5;
+    if (down && this.velocity > -this.maxVelocity)
+      this.velocity = this.velocity - 0.5;
 
-    if (up) this.position.x += velocity;
+    if (left) this.canvas.rotate(-3);
 
-    if (down) this.position.x -= velocity;
+    if (right) this.canvas.rotate(3);
 
-    if (left) this.canvas.rotate(-10);
-
-    if (right) this.canvas.rotate(10);
+    this.position.x += this.velocity;
 
     this.canvas.move(this.position.x, this.position.y);
   }

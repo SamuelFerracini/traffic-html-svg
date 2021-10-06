@@ -4,67 +4,51 @@ import { Map } from "./entities/map.js";
 
 import { Car } from "./entities/car.js";
 
-let map = new Map({ width: window.innerWidth, height: window.innerHeight });
+import { Game } from "./game.js";
 
-map.draw();
+class Main {
+  game = null;
 
-let car = new Car({
-  x: 400,
-  y: 200,
-  color: "pink",
-  size: { height: 50, width: 100 },
-});
+  setup() {
+    let game = new Game({
+      windowSize: { width: window.innerWidth, height: window.innerHeight },
+    });
 
-let entities = [new TrafficLight({ x: 200, y: 200 }), car];
+    game.drawWindow();
 
-map.setEntities(entities);
+    let map = new Map({
+      width: window.innerWidth,
+      height: window.innerHeight,
+      context: game.context,
+    });
 
-map.entities.map((e) => {
-  e.draw();
-  e.turnOn();
-});
+    game.setMap(map);
 
-var tickRate = 25,
-  keyDown = {},
-  keyMap = {
-    37: "left",
-    38: "up",
-    39: "right",
-    40: "down",
-    87: "w",
-    68: "d",
-    65: "a",
-    83: "s",
-  };
+    let userCar = new Car({
+      color: "red",
+      x: 100,
+      y: 100,
+      context: game.context,
+    });
 
-addEventListener("keydown", (e) => {
-  console.log(e.which);
-  keyDown[keyMap[e.which]] = true;
-});
+    let entities = [
+      new TrafficLight({ x: 200, y: 200, context: game.context }),
+      userCar,
+    ];
 
-addEventListener("keyup", (e) => {
-  keyDown[keyMap[e.which]] = false;
-});
+    game.setEntities(entities);
 
-var tick = function () {
-  let keys = { up: false, down: false, left: false, right: false };
+    game.drawAllStuff();
 
-  if (keyDown["up"] || keyDown["w"]) {
-    keys.up = true;
-  }
-  if (keyDown["down"] || keyDown["s"]) {
-    keys.down = true;
-  }
-  if (keyDown["left"] || keyDown["a"]) {
-    keys.left = true;
-  }
-  if (keyDown["right"] || keyDown["d"]) {
-    keys.right = true;
+    this.game = game;
   }
 
-  car.drive(keys);
+  start() {
+    this.game.start();
+  }
+}
 
-  setTimeout(tick, tickRate);
-};
+let main = new Main();
 
-tick();
+main.setup();
+main.start();

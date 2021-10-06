@@ -10,4 +10,6 @@ export class Character extends Canvas {
   }
 
   turnOn() {}
+
+  update() {}
 }
