@@ -9,7 +9,7 @@ export class Game {
     height: 0,
   };
 
-  constructor({ windowSize, tickRate = 30 }) {
+  constructor({ windowSize, tickRate = 1 }) {
     this.windowSize = windowSize;
     this.tickRate = tickRate;
   }

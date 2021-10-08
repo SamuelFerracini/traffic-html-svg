@@ -4,6 +4,7 @@ export class Car extends Character {
   color = "";
   size = { width: 0, height: 0 };
   isAI = false;
+  direction = "right";
 
   velocity = { x: 0, y: 0 };
 
@@ -20,7 +21,7 @@ export class Car extends Character {
     y,
     context,
     color,
-    size = { width: 100, height: 50 },
+    size = { width: 150, height: 150 },
     game,
   }) {
     super({ x, y, context });
@@ -56,7 +57,6 @@ export class Car extends Character {
       down: false,
       left: false,
       right: false,
-      space: false,
     };
 
     if (this.keyDown["up"] || this.keyDown["w"]) keys.up = true;
@@ -67,8 +67,6 @@ export class Car extends Character {
 
     if (this.keyDown["right"] || this.keyDown["d"]) keys.right = true;
 
-    if (this.keyDown["space"]) keys.space = true;
-
     this.drive(keys);
   }
 
@@ -77,21 +75,21 @@ export class Car extends Character {
   }
 
   draw() {
-    let colors = ["green", "yellow", "red", "white", "pink"];
+    let colors = ["blue"];
 
     if (colors.findIndex((color) => color === this.color) === -1) {
       throw new Error(`Car color not found ${this.color}`);
     }
 
     this.canvas = this.context
-      .image(`./cars/${this.color}.svg`)
+      .image(`./images/spaceships/${this.color}/${this.direction}.svg`)
       .size(this.size.width, this.size.height)
       .move(this.position.x, this.position.y);
   }
 
   checkCarPosition() {
     const { x, y } = document
-      .getElementsByTagName("image")[0]
+      .getElementsByTagName("image")[1]
       .getBoundingClientRect();
 
     if (y < -this.size.width) this.position.y = this.game.windowSize.height;
@@ -109,42 +107,42 @@ export class Car extends Character {
     }
   }
 
-  drive({ up, down, left, right, space }) {
+  drive({ up, down, left, right }) {
     this.checkCarPosition();
 
-    const baseVelocity = 0.5;
+    const baseVelocity = 0.009;
 
-    // if (space && this.velocity > 3) {
-    //   this.velocity = this.velocity - 0.5;
+    console.log(this.direction);
 
-    //   if (left) {
-    //     this.canvas.rotate(
-    //       -3,
-    //       this.position.x + this.size.width,
-    //       this.position.y
-    //     );
-    //   }
+    if (up) {
+      this.velocity.y = this.velocity.y - baseVelocity;
+      this.direction = "up";
+    }
 
-    //   if (right)
-    //     this.canvas.rotate(
-    //       5,
-    //       this.position.x + this.size.width / 2,
-    //       this.position.y
-    //     );
-    // }
+    if (down) {
+      this.velocity.y = this.velocity.y + baseVelocity;
+      this.direction = "down";
+    }
 
-    if (up) this.velocity.y = this.velocity.y - baseVelocity;
+    if (left) {
+      this.velocity.x = this.velocity.x - baseVelocity;
+      this.direction = "left";
+    }
 
-    if (down) this.velocity.y = this.velocity.y + baseVelocity;
-
-    if (left) this.velocity.x = this.velocity.x - baseVelocity;
-
-    if (right) this.velocity.x = this.velocity.x + baseVelocity;
-
-    console.log(this.position);
+    if (right) {
+      this.velocity.x = this.velocity.x + baseVelocity;
+      this.direction = "right";
+    }
 
     this.position.x = this.position.x + this.velocity.x;
     this.position.y = this.position.y + this.velocity.y;
+
+    document
+      .getElementsByTagName("image")[1]
+      .setAttribute(
+        "href",
+        `./images/spaceships/${this.color}/${this.direction}.svg`
+      );
 
     this.canvas.move(this.position.x, this.position.y);
   }

@@ -16,9 +16,7 @@ export class Map extends Character {
   }
 
   draw() {
-    this.context.rect(this.width, this.height).fill(this.backgroundColor);
-
-    this._drawStreets();
+    // this._drawStreets();
   }
 
   _drawStreets() {

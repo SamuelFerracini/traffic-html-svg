@@ -6,6 +6,8 @@ import { Car } from "./entities/car.js";
 
 import { Game } from "./game.js";
 
+import { Asteroid } from "./entities/asteroid.js";
+
 class Main {
   game = null;
 
@@ -25,17 +27,20 @@ class Main {
     game.setMap(map);
 
     let userCar = new Car({
-      color: "red",
+      color: "blue",
       x: 100,
       y: 100,
       context: game.context,
       game,
     });
 
-    let entities = [
-      new TrafficLight({ x: 200, y: 200, context: game.context }),
-      userCar,
-    ];
+    const asteroid = new Asteroid({
+      x: 200,
+      y: 200,
+      context: game.context,
+    });
+
+    let entities = [asteroid, userCar];
 
     game.setEntities(entities);
 

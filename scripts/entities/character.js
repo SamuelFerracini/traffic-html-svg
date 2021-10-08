@@ -9,7 +9,7 @@ export class Character extends Canvas {
     this.position = { x, y };
   }
 
-  turnOn() {}
+  draw() {}
 
   update() {}
 }
