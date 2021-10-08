@@ -5,7 +5,7 @@ export class Car extends Character {
   size = { width: 0, height: 0 };
   isAI = false;
 
-  velocity = 0;
+  velocity = { x: 0, y: 0 };
 
   maxVelocity = 20;
 
@@ -94,18 +94,10 @@ export class Car extends Character {
       .getElementsByTagName("image")[0]
       .getBoundingClientRect();
 
-    console.log({ x, y });
-
-    if (y < -this.size.width) {
-      this.position.x =
-        this.position.x - (this.game.windowSize.height + this.size.width * 2);
-    }
+    if (y < -this.size.width) this.position.y = this.game.windowSize.height;
 
     if (y > this.game.windowSize.height + this.size.width) {
-      console.log("SAIU DA TELA");
-
-      this.position.x =
-        this.position.x - (this.game.windowSize.height + this.size.width * 2);
+      this.position.y = -this.size.width;
     }
 
     if (x < -this.size.width) {
@@ -113,44 +105,46 @@ export class Car extends Character {
     }
 
     if (x > this.game.windowSize.width + this.size.width) {
-      this.position.x = 0 - this.size.width;
+      this.position.x = -this.size.width;
     }
   }
 
   drive({ up, down, left, right, space }) {
     this.checkCarPosition();
 
-    if (space && this.velocity > 3) {
-      this.velocity = this.velocity - 0.5;
+    const baseVelocity = 0.5;
 
-      if (left) {
-        this.canvas.rotate(
-          -3,
-          this.position.x + this.size.width,
-          this.position.y
-        );
-      }
+    // if (space && this.velocity > 3) {
+    //   this.velocity = this.velocity - 0.5;
 
-      if (right)
-        this.canvas.rotate(
-          5,
-          this.position.x + this.size.width / 2,
-          this.position.y
-        );
-    }
+    //   if (left) {
+    //     this.canvas.rotate(
+    //       -3,
+    //       this.position.x + this.size.width,
+    //       this.position.y
+    //     );
+    //   }
 
-    if (up && this.velocity < this.maxVelocity)
-      this.velocity = this.velocity + 0.5;
+    //   if (right)
+    //     this.canvas.rotate(
+    //       5,
+    //       this.position.x + this.size.width / 2,
+    //       this.position.y
+    //     );
+    // }
 
-    if (down && this.velocity > -this.maxVelocity)
-      this.velocity = this.velocity - 0.5;
+    if (up) this.velocity.y = this.velocity.y - baseVelocity;
 
-    if (left && this.velocity !== 0) this.canvas.rotate(-3);
+    if (down) this.velocity.y = this.velocity.y + baseVelocity;
 
-    if (right && this.velocity !== 0) this.canvas.rotate(3);
+    if (left) this.velocity.x = this.velocity.x - baseVelocity;
 
-    this.position.x += this.velocity;
-    // this.position.y += this.velocity;
+    if (right) this.velocity.x = this.velocity.x + baseVelocity;
+
+    console.log(this.position);
+
+    this.position.x = this.position.x + this.velocity.x;
+    this.position.y = this.position.y + this.velocity.y;
 
     this.canvas.move(this.position.x, this.position.y);
   }
