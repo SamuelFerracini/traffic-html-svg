@@ -29,6 +29,7 @@ class Main {
       x: 100,
       y: 100,
       context: game.context,
+      game,
     });
 
     let entities = [
